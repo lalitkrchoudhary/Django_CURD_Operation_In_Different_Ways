@@ -7,6 +7,7 @@ from .serializer import EmployeeSerializer
 from rest_framework import status
 from django.http import Http404
 from rest_framework import mixins, generics
+from rest_framework import viewsets
 
 
 
@@ -14,8 +15,71 @@ from rest_framework import mixins, generics
 
 # Create your views here.
 
+"""
+#Viewset Curd operation for Employee
+====================================== """
 
+#viewsets.ModelViewSet Take only queryset and serializer_class as arguments
+# from rest_framework import viewsets
+#In viewsets you have to also change the urls.py file to use router
+# from rest_framework.routers import DefaultRouter
+
+#1 way to define viewset
+class EmployeeView(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    # This will automatically provide list, create, retrieve, update, and destroy actions
+
+
+#2 way to define viewset
+class EmployeeView(viewsets.ViewSet):
+    def list(self, request):
+        employees = Employee.objects.all()
+        serializer = EmployeeSerializer(employees, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = EmployeeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def retrieve(self, request, pk=None):
+        try:
+            employee = Employee.objects.get(pk=pk)
+        except Employee.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data)
+    def update(self, request, pk=None):
+        try:
+            employee = Employee.objects.get(pk=pk)
+        except Employee.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = EmployeeSerializer(employee, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def destroy(self, request, pk=None):
+        try:
+            employee = Employee.objects.get(pk=pk)
+        except Employee.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        employee.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+ 
+
+
+
+
+"""
 # Generic based CURD Operation for Employee
+===========================================
 class EmployeeView(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -26,7 +90,7 @@ class EmployeeIdView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = EmployeeSerializer
     lookup_field = 'pk'  # Allows using 'pk' in the URL for detail view
     
-    
+"""
 
 
 
