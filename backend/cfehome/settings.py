@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'products',  # Another app name
     'employees',  # Another app name
     'rest_framework',  # Django REST Framework
+    'blog',  # Blog app
+    
     
     
 ]
