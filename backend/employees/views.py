@@ -15,6 +15,24 @@ from rest_framework import mixins, generics
 # Create your views here.
 
 
+# Generic based CURD Operation for Employee
+class EmployeeView(generics.ListCreateAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    
+
+class EmployeeIdView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    lookup_field = 'pk'  # Allows using 'pk' in the URL for detail view
+    
+    
+
+
+
+
+
+
 """
 
 #Mixin based CURD Operation for Employee
