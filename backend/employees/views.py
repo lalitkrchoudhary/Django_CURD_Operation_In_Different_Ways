@@ -14,7 +14,11 @@ from rest_framework import mixins, generics
 
 # Create your views here.
 
+
+"""
+
 #Mixin based CURD Operation for Employee
+=========================================
 class EmployeeView(mixins.ListModelMixin,mixins.CreateModelMixin, generics.GenericAPIView):
     queryset =Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -25,10 +29,22 @@ class EmployeeView(mixins.ListModelMixin,mixins.CreateModelMixin, generics.Gener
         return self.create(request)
     
 class EmployeeIdView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
-    pass
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+
+    def get(self,request, pk):
+        return self.retrieve(request, pk)
+    def put(self, request, pk):
+        return self.update(request,pk)
+    def delete(self, request, pk):
+        return self.destroy(request,pk)
+
+
+        """
 
 """
 #Class based CURD Operation for Employee
+==========================================
 class EmployeeView(APIView):
     def get(self, request):
         # Logic to retrieve employee data
