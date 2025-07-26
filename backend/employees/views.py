@@ -8,6 +8,8 @@ from rest_framework import status
 from django.http import Http404
 from rest_framework import mixins, generics
 from rest_framework import viewsets
+from employees.filters import EmployeeFilter
+
 
 
 
@@ -18,17 +20,17 @@ from rest_framework import viewsets
 """
 #Viewset Curd operation for Employee
 ====================================== """
-
+"""
 #viewsets.ModelViewSet Take only queryset and serializer_class as arguments
 # from rest_framework import viewsets
 #In viewsets you have to also change the urls.py file to use router
 # from rest_framework.routers import DefaultRouter
 
-#1 way to define viewset
-class EmployeeView(viewsets.ModelViewSet):
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
-    # This will automatically provide list, create, retrieve, update, and destroy actions
+# #1 way to define viewset
+# class EmployeeView(viewsets.ModelViewSet):
+#     queryset = Employee.objects.all()
+#     serializer_class = EmployeeSerializer
+#     # This will automatically provide list, create, retrieve, update, and destroy actions
 
 
 #2 way to define viewset
@@ -72,17 +74,18 @@ class EmployeeView(viewsets.ViewSet):
         employee.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
- 
+ """
 
 
 
 
-"""
-# Generic based CURD Operation for Employee
-===========================================
+
+# # Generic based CURD Operation for Employee
+# ===========================================
 class EmployeeView(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+    filterset_class = EmployeeFilter
     
 
 class EmployeeIdView(generics.RetrieveUpdateDestroyAPIView):
@@ -90,7 +93,6 @@ class EmployeeIdView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = EmployeeSerializer
     lookup_field = 'pk'  # Allows using 'pk' in the URL for detail view
     
-"""
 
 
 

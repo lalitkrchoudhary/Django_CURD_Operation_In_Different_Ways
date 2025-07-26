@@ -3,3 +3,4 @@ djangorestframework
 pyyaml>=6.0.1
 requests
 django-cors-headers
+django-filter
